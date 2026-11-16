@@ -1,0 +1,294 @@
+===============================================================================
+  TRABALHO 2 DE COMPUTACAO GRAFICA (14350) - EXERCICIO 2: SIMULAR A ATERRAGEM
+  Tome Pedro - 53702 - PL2
+  Funcionalidades do programa: para que servem, como se usam e o que mostram
+===============================================================================
+
+COMO CORRER
+-----------
+  Na pasta do trabalho:   make run
+  (precisa de GLFW, GLEW e GLM; no macOS, instalados com o Homebrew)
+  O programa abre em pausa, com o menu dos comandos. ENTER comeca.
+
+OBJETIVO DO JOGO
+----------------
+  O utilizador pilota um Cessna 182. O avião comeca estabilizado na rampa de
+  aproximacao de 3 graus, a 1,55 km da pista (a ~87 m de altura, a 65 kt, flaps
+  a 30 graus e 35% de potencia), antes de uma serra que tem de passar por cima.
+  Tem de seguir a rampa ate a pista e, perto do chao, fazer o "flare": tirar a
+  potencia e levantar o nariz devagar, para tocar suavemente. Depois trava (B).
+  Se nao se tocar em nada, o avião segue a rampa sozinho e toca a ~-340 ft/min.
+
+
+===============================================================================
+  CONTROLOS
+===============================================================================
+  W / S  ou  setas cima/baixo     nariz para baixo / para cima
+  A / D  ou  setas esq./dir.      inclinar para a esquerda / direita
+  Q / E                           leme de direcao (no chao: roda do nariz)
+  + / -                           mais / menos potencia (5% de cada vez)
+  F / G                           descer / subir flaps (0 - 10 - 20 - 30 graus)
+  B (manter carregado)            travoes
+  Rato: botao DIREITO + arrastar  manche (cima/baixo = pitch, lados = inclinacao)
+  Rato: botao ESQUERDO + arrastar rodar a camara (no cockpit: olhar a volta)
+  Roda do rato                    zoom (perseguicao e torre)
+  C                               mudar de camara: perseguicao / torre / cockpit
+  N                               dia / noite
+  R                               recomecar a aterragem
+  ESC                             abrir / fechar o menu (pausa)
+  No menu: ENTER continuar, R recomecar, X sair
+
+
+===============================================================================
+  PARTE OBRIGATORIA (enunciado)
+===============================================================================
+
+1) PELO MENOS DOIS MODELOS .OBJ (MALHAS DE TRIANGULOS): AVIAO E PISTA
+   Para que serve: os objetos da cena vem de ficheiros, nao estao escritos no
+     codigo.
+   Como funciona: o programa tem um leitor de .obj/.mtl proprio (loadOBJ e
+     loadMTL). Le v, vn, vt, f (triangulos ou poligonos, que divide em
+     triangulos em leque), o (nome do objeto), mtllib e usemtl; do .mtl le Kd,
+     Ks, Ns, d e map_Kd. Os vertices vao para a placa grafica num VBO
+     (8 floats por vertice: posicao, normal, coordenada de textura), agrupados
+     por objeto e material, e desenham-se com um glDrawArrays por grupo.
+   Modelos:
+     - models/c182/cessna182.obj  Cessna 182 Skylane (VTX, Sketchfab), o que se
+       pilota, ~195 mil triangulos, com texturas;
+     - models/runway.obj          a pista do link do enunciado ("RUNWAY 8.blend"),
+       exportada do Blender;
+     - models/cessna152.obj       Cessna 152 (os dois avioes estacionados).
+   O que mostra: o avião e a pista na cena (e os gerados: aeroporto, terreno,
+     cidades, piloto).
+
+2) RODAR E TRANSLADAR COM O RATO E O TECLADO
+   Para que serve: pilotar o avião e mexer a camara.
+   Como funciona: o teclado e o rato dao os comandos (manche, leme, potencia);
+     o modelo de voo transforma-os em posicao e angulos. A matriz do avião e
+       M = T(posicao) . Ry(rumo) . Rx(-pitch) . Rz(inclinacao)
+     (origem nas rodas principais, por isso o avião roda a volta delas).
+     O rato tambem roda a camara a volta do avião (botao esquerdo) e faz zoom
+     (roda).
+   Como usar: ver CONTROLOS.
+   O que mostra: o avião a subir, descer, inclinar e virar; a camara a rodar.
+
+3) UMA LUZ PONTUAL
+   Para que serve: iluminar a cena.
+   Como funciona: luz em (-250, 400, 150) com atenuacao com a distancia,
+     1 / (1 + 0.0002 d + 0.0000002 d^2). De noite fica mais fraca (faz de lua).
+   O que mostra: o lado virado para a luz mais claro; o sol desenhado na skybox
+     esta na direcao desta luz.
+
+4) SOMBREAMENTO DE PHONG
+   Para que serve: dar volume e brilho as superficies.
+   Como funciona: calculado por fragmento (pixel) no fragment shader:
+       cor = ambiente + difusa (Lambert, N.L) + especular ((R.V)^Ns)
+     com a normal interpolada e normalizada em cada pixel. Kd, Ks e Ns vem do
+     .mtl de cada material. Tem ainda nevoeiro com a distancia (o terreno ao
+     longe mistura-se com o ceu).
+   O que mostra: brilhos na pintura, nos vidros e no capacete do piloto, que se
+     mexem quando a camara se mexe.
+
+
+===============================================================================
+  BASE DO SIMULADOR (alem do obrigatorio)
+===============================================================================
+
+5) MODELO DE VOO
+   Para que serve: o avião voa de forma realista (com dados do Cessna 182:
+     1406 kg, asa de 16,2 m2, 230 hp).
+   Como funciona: o avião e um ponto com velocidade V, angulo da trajetoria e
+     rumo. Em cada passo (5 ms) calcula-se sustentacao, resistencia, tracao e
+     peso e integra-se (metodo de Euler). A sustentacao fica limitada a um
+     maximo (nao ha perda/stall). Nas curvas, inclinar faz virar. No chao ha
+     atrito de rolamento (asfalto ou relva) e travoes.
+   O que mostra: o avião a perder ou ganhar velocidade e altura conforme a
+     potencia, o pitch e os flaps.
+
+6) AVALIACAO DA ATERRAGEM
+   Para que serve: dizer como correu o toque.
+   Como funciona: no toque mede-se a velocidade vertical, a inclinacao e o
+     pitch: mais de 1000 ft/min, mais de 15 graus de inclinacao ou nariz muito
+     em baixo = acidente; ate 600 = dura; ate 300 = aceitavel; menos = boa.
+     Avisa tambem se tocou fora da pista ou de nariz. Bater no terreno tambem e
+     acidente.
+   O que mostra: uma mensagem ao centro do ecra (verde, amarela ou vermelha).
+
+7) MENU E HUD
+   Para que serve: explicar os comandos e mostrar os dados do voo.
+   Como funciona: desenho 2D por cima da cena (um shader que converte pixeis em
+     coordenadas do ecra), com texto da biblioteca stb_easy_font.
+     - Menu: tabela com tres seccoes (pilotar, camara, jogo); cada tecla e
+       desenhada como uma tecla de teclado. O jogo fica em pausa.
+     - HUD: fase do voo, velocidade, altitude, velocidade vertical, pitch,
+       inclinacao, potencia, flaps e o desvio a rampa.
+   Como usar: ESC abre/fecha o menu.
+
+8) TRES CAMARAS
+   Para que serve: ver o avião de varios sitios.
+   Como funciona: matriz view com lookAt.
+     - Perseguicao: atras do avião, roda com o rato e faz zoom com a roda.
+     - Torre: da janela da torre de controlo, com zoom automatico conforme a
+       distancia ao avião.
+     - Cockpit: ver o ponto 15.
+   Como usar: tecla C.
+
+
+===============================================================================
+  EXTRAS ESCOLHIDOS
+===============================================================================
+
+9) TEXTURAS
+   Para que serve: o Cessna 182 tem pintura, letreiros e painel desenhados em
+     imagens.
+   Como funciona: cada canto de cada triangulo tem uma coordenada uv (vt no .obj)
+     que diz que ponto da imagem lhe corresponde. A imagem e lida com stb_image
+     (virada na vertical, porque no OpenGL v = 0 e em baixo), enviada com
+     glTexImage2D e com mipmaps. No fragment shader a cor do material e
+     Kd x texture(tex, uv). O alfa da textura recorta letreiros (alpha test).
+   O que mostra: a pintura, os letreiros e o interior do avião.
+
+10) PINTURA (LIVERY) DA UBI
+   Para que serve: personalizar o avião com as cores e o logotipo da UBI.
+   Como funciona: a imagem da pintura (models/c182/c182_exterior.jpg) foi
+     refeita por scripts (tools/pintura_c182): primeiro calcula-se, para cada
+     pixel da imagem, que ponto do avião ele pinta; depois o esquema original
+     passa a azul UBI e branco e os logotipos e a matricula 53702 sao colocados
+     em metros, no avião, e projetados na imagem.
+   O que mostra: o logotipo da UBI nas asas, na fuselagem e no leme, e 53702.
+
+11) VIDROS TRANSPARENTES
+   Para que serve: ver o interior da cabine e o piloto.
+   Como funciona: os materiais com d < 1 desenham-se depois de tudo o que e
+     opaco, com blending (mistura com o que esta atras) e sem escrever no depth
+     buffer.
+   O que mostra: o interior do avião atraves das janelas.
+
+12) SKYBOX
+   Para que serve: ter ceu em vez de uma cor lisa.
+   Como funciona: um cubo a volta da camara com uma cubemap (6 imagens geradas
+     por tools/gerar_skybox.py: ceu, nuvens e sol). Desenha-se atras de tudo
+     (profundidade maxima) e so roda com a camara, nunca se aproxima.
+   O que mostra: ceu com nuvens e sol; de noite fica escuro.
+
+13) LUZES DA PISTA E PAPI
+   Para que serve: ajudar a acertar na pista e na rampa, sobretudo de noite.
+   Como funciona: cada luz e um "point sprite" (um ponto com tamanho no ecra) que
+     o shader pinta como um disco que brilha, somado a cor da cena.
+     - Bordas brancas, soleira verde, fim da pista vermelho.
+     - Luzes de aproximacao com um flash que corre em direcao a pista.
+     - PAPI: 4 luzes ao lado do ponto de toque. Cada uma fica branca se o piloto
+       a ve acima do seu angulo e vermelha se abaixo.
+         2 brancas + 2 vermelhas = na rampa certa
+         3 ou 4 brancas = alto demais    3 ou 4 vermelhas = baixo demais
+   Como usar: ver de noite (N) e olhar para o PAPI na aproximacao.
+
+14) DIA / NOITE
+   Para que serve: ver a cena de noite com as luzes.
+   Como funciona: o ceu, o nevoeiro e a luz escurecem; as janelas de edificios e
+     casas ganham luz propria (emissive no shader) e os candeeiros acendem.
+   Como usar: tecla N.
+
+15) VISTA DO COCKPIT COM INSTRUMENTOS
+   Para que serve: pilotar como um piloto, de dentro do avião.
+   Como funciona: a camara esta nos olhos do piloto, em coordenadas do avião,
+     e roda com ele. Em baixo ha um painel 2D com os 6 instrumentos classicos,
+     todos a mexer com os dados do voo: velocimetro (0-200 kt com os arcos do
+     C182), horizonte artificial, altimetro, coordenador de curva, indicador de
+     rumo e variometro, e as barras de potencia e flaps.
+   Como usar: tecla C ate "Cockpit"; arrastar com o botao esquerdo para olhar a
+     volta.
+
+16) EDIFICIOS DO AEROPORTO
+   Para que serve: dar vida ao aerodromo.
+   Como funciona: gerados pelo programa (models/airport.obj) com caixas,
+     cilindros e um hangar em arco: torre de controlo, hangar, terminal, placa
+     com dois Cessna 152 estacionados e manga de vento.
+   O que mostra: o aeroporto junto a pista (a camara "Torre" olha da torre).
+
+17) TERRENO MONTANHOSO
+   Para que serve: paisagem e um obstaculo a ultrapassar na aproximacao.
+   Como funciona: a altura h(x, z) vem de ruido fractal (varias camadas de
+     ruido). E plano no aerodromo e nas cidades; ha uma serra a atravessar a
+     aproximacao, com um "vale" por baixo da rampa. A cor depende da altura e da
+     inclinacao (relva, rocha, neve). Bater no terreno e acidente.
+   O que mostra: montanhas a volta, e a serra que se passa por cima ao inicio.
+
+18) CIDADES
+   Para que serve: paisagem com povoacoes.
+   Como funciona: 6 aglomerados gerados com um gerador aleatorio de semente fixa
+     (sempre iguais): predios no centro e casas a volta. De noite ~35% das
+     janelas acendem-se e os candeeiros brilham.
+   O que mostra: povoacoes a volta do aerodromo, iluminadas a noite.
+
+19) PILOTO
+   Para que serve: ter alguem a pilotar, visivel pela janela.
+   Como funciona: gerado pelo programa (models/pilot.obj) com elipsoides, troncos
+     de cone e caixas. Fato azul UBI com emblema, capacete branco com risca azul
+     e viseira escura. Tem 3 pecas com matrizes proprias:
+       corpo  - vai com o avião;
+       cabeca - roda a volta do pescoco: olha para dentro das curvas e inclina-se
+                para manter o horizonte;
+       bracos - as maos seguem o manche quando se puxa ou empurra.
+   Como usar: inclinar o avião (A/D) e ver a cabeca do piloto a acompanhar
+     (camara de perseguicao, perto da janela esquerda).
+
+20) PECAS QUE SE MEXEM: HELICE, FLAPS, AILERONS, PROFUNDOR, LEME E MANCHE
+   Para que serve: o avião reage visivelmente aos comandos.
+   Como funciona: cada peca roda a volta de um eixo que nao passa pela origem:
+       local = T(p) . R(angulo, eixo) . T(-p)
+     (leva o ponto p do eixo para a origem, roda, volta a pôr no sitio) e a
+     matriz final e M_avião . local.
+     - Helice: roda conforme a potencia; acima de ~1000 rpm ve-se um disco
+       semitransparente (como nas fotografias).
+     - Flaps: descem/sobem devagar com F/G.
+     - Ailerons (A/D), profundor (W/S) e leme de direcao (Q/E) seguem os
+       comandos; o manche dentro da cabine anda para a frente/tras e roda.
+   Como usar: carregar nas teclas e ver o avião na camara de perseguicao.
+
+21) LUZES DE NAVEGACAO DO AVIAO
+   Para que serve: ver o avião de noite e saber para onde esta virado.
+   Como funciona: os mesmos point sprites das luzes da pista, presos ao avião
+     (posicao = M_avião . p).
+     - Vermelha na ponta da asa esquerda, verde na direita, branca na cauda:
+       cada uma so se ve do seu lado (como nos avioes reais).
+     - Farol vermelho no topo do leme, a pulsar.
+     - Strobes brancos nas pontas das asas, com flash duplo.
+     - Farois de aterragem na asa esquerda, acesos na aproximacao.
+   Como usar: modo noite (N) e rodar a camara a volta do avião.
+
+22) CAMARA DE ATERRAGEM
+   Para que serve: ver o proprio toque de fora, enquanto se pilota.
+   Como funciona: a cena e desenhada duas vezes no mesmo frame. A segunda vez e
+     vista de uma camara ao lado da pista, com zoom automatico, e so dentro de
+     um retangulo no canto superior direito (glViewport e glScissor).
+   Quando aparece: abaixo de 35 m de altura na aproximacao, e enquanto o avião
+     rola na pista. Tem moldura e um ponto vermelho "REC" a piscar.
+
+23) REFLEXO DO CEU NA PINTURA
+   Para que serve: a pintura e os vidros do avião parecem brilhantes.
+   Como funciona: no fragment shader, o raio que vai do olho a superficie e
+     refletido (reflect, a mesma funcao do especular de Phong) e com essa
+     direcao le-se a cubemap da skybox. Mistura-se um pouco dessa cor com a
+     pintura, mais quando se ve de lado (efeito de Fresnel). So se reflete o
+     ceu, nao a pista nem as montanhas.
+   O que mostra: tons de ceu e nuvens na pintura e nas janelas do avião.
+
+
+===============================================================================
+  FICHEIROS PRINCIPAIS
+===============================================================================
+  src/main.cpp                 o programa todo (comentado)
+  src/stb_image.h              leitura de imagens (skybox e texturas)
+  src/stb_easy_font.h          texto no ecra
+  models/c182/                 Cessna 182 (.obj, .mtl e texturas)
+  models/runway.obj            pista do professor
+  models/cessna152.obj         Cessna 152 (avioes estacionados)
+  models/skybox/               as 6 imagens do ceu
+  models/airport.obj, terrain.obj, city.obj, pilot.obj, prop_disc.obj
+                               gerados pelo programa sempre que arranca
+  tools/                       scripts usados para preparar os modelos e imagens
+                               (converter o avião e a pista, texturas, pintura,
+                               separar flaps/ailerons, skybox)
+  README.md                    resumo tecnico
+  FUNCIONALIDADES.txt          este ficheiro

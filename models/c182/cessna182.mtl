@@ -1,0 +1,255 @@
+# Cessna 182 Skylane (VTX, Sketchfab) - materiais simplificados para o programa
+# map_Kd = textura difusa; d < 1 = transparente (vidros)
+
+newmtl 1
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_ecra1.jpg
+
+newmtl 2
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_ecra2.jpg
+
+newmtl Material.002
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.003
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.004
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.005
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.007
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.008
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.009
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.010
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.011
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.012
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.014
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+map_Kd c182_exterior.jpg
+
+newmtl Material.015
+Kd 0.93 0.94 0.95
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+
+newmtl Material.016
+Kd 0.93 0.94 0.95
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+
+newmtl Material.017
+Kd 0.85 0.85 0.85
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+
+newmtl Material.018
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior1.jpg
+
+newmtl Material.019
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior1.jpg
+
+newmtl Material.020
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior1.jpg
+
+newmtl Material.021
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl Material.023
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl Material.024
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl Material.025
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl Material.028
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_letreiros.png
+
+newmtl Material.029
+Kd 0.85 0.85 0.85
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+
+newmtl Material.030
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl c182_sign_1
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_rodas.jpg
+
+newmtl default
+Kd 0.93 0.94 0.95
+Ks 0.45 0.45 0.45
+Ns 60
+d 1.00
+
+newmtl erj_belly
+Kd 0.85 0.85 0.85
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+
+newmtl erj_windshield
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 0.95
+map_Kd c182_vidros.png
+
+newmtl gauge_c182t_1
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_instrumentos.jpg
+
+newmtl generic_glass
+Kd 1.0 1.0 1.0
+Ks 0.45 0.45 0.45
+Ns 60
+d 0.35
+map_Kd c182_vidro.png
+
+newmtl int1
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior1.jpg
+
+newmtl int2
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_interior2.jpg
+
+newmtl lights
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_luzes.jpg
+
+newmtl lights.001
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_luzes.jpg
+
+newmtl lights.002
+Kd 1.0 1.0 1.0
+Ks 0.15 0.15 0.15
+Ns 20
+d 1.00
+map_Kd c182_luzes.jpg

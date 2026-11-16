@@ -1,0 +1,49 @@
+# Materiais gerados por main.cpp
+
+newmtl parede1
+Kd 0.86 0.83 0.76
+Ks 0.1 0.1 0.1
+Ns 8
+d 1
+
+newmtl parede2
+Kd 0.8 0.7 0.58
+Ks 0.1 0.1 0.1
+Ns 8
+d 1
+
+newmtl parede3
+Kd 0.92 0.92 0.9
+Ks 0.1 0.1 0.1
+Ns 8
+d 1
+
+newmtl telha
+Kd 0.62 0.26 0.15
+Ks 0.1 0.1 0.1
+Ns 8
+d 1
+
+newmtl telhado_plano
+Kd 0.4 0.4 0.42
+Ks 0.1 0.1 0.1
+Ns 8
+d 1
+
+newmtl janela_apagada
+Kd 0.12 0.14 0.18
+Ks 0.6 0.6 0.6
+Ns 64
+d 1
+
+newmtl janela_acesa
+Kd 0.12 0.14 0.18
+Ks 0.6 0.6 0.6
+Ns 64
+d 1
+
+newmtl estrada
+Kd 0.28 0.28 0.29
+Ks 0.05 0.05 0.05
+Ns 8
+d 1

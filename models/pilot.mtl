@@ -1,0 +1,49 @@
+# Materiais gerados por main.cpp
+
+newmtl fato
+Kd 0.05 0.16 0.31
+Ks 0.15 0.15 0.15
+Ns 12
+d 1
+
+newmtl emblema
+Kd 0.95 0.95 0.95
+Ks 0.2 0.2 0.2
+Ns 16
+d 1
+
+newmtl luvas
+Kd 0.06 0.06 0.06
+Ks 0.3 0.3 0.3
+Ns 24
+d 1
+
+newmtl botas
+Kd 0.08 0.07 0.06
+Ks 0.3 0.3 0.3
+Ns 24
+d 1
+
+newmtl pele
+Kd 0.86 0.66 0.52
+Ks 0.15 0.15 0.15
+Ns 16
+d 1
+
+newmtl capacete
+Kd 0.95 0.96 0.97
+Ks 0.7 0.7 0.7
+Ns 80
+d 1
+
+newmtl risca
+Kd 0.05 0.16 0.31
+Ks 0.7 0.7 0.7
+Ns 80
+d 1
+
+newmtl viseira
+Kd 0.04 0.05 0.07
+Ks 0.9 0.9 0.9
+Ns 120
+d 1

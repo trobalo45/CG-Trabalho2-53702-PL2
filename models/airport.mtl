@@ -1,0 +1,73 @@
+# Materiais gerados por main.cpp
+
+newmtl luz_base
+Kd 0.25 0.25 0.25
+Ks 0.2 0.2 0.2
+Ns 16
+d 1
+
+newmtl papi
+Kd 0.85 0.85 0.8
+Ks 0.3 0.3 0.3
+Ns 16
+d 1
+
+newmtl placa
+Kd 0.3 0.3 0.31
+Ks 0.08 0.08 0.08
+Ns 16
+d 1
+
+newmtl amarelo
+Kd 0.9 0.72 0.1
+Ks 0.2 0.2 0.2
+Ns 16
+d 1
+
+newmtl betao
+Kd 0.78 0.76 0.72
+Ks 0.15 0.15 0.15
+Ns 16
+d 1
+
+newmtl vidro_ed
+Kd 0.16 0.26 0.32
+Ks 0.9 0.9 0.9
+Ns 80
+d 1
+
+newmtl telhado
+Kd 0.55 0.57 0.6
+Ks 0.6 0.6 0.6
+Ns 48
+d 1
+
+newmtl hangar
+Kd 0.7 0.72 0.74
+Ks 0.3 0.3 0.3
+Ns 32
+d 1
+
+newmtl porta
+Kd 0.32 0.34 0.37
+Ks 0.2 0.2 0.2
+Ns 16
+d 1
+
+newmtl poste
+Kd 0.55 0.55 0.55
+Ks 0.4 0.4 0.4
+Ns 32
+d 1
+
+newmtl laranja
+Kd 0.95 0.42 0.08
+Ks 0.2 0.2 0.2
+Ns 16
+d 1
+
+newmtl branco
+Kd 0.92 0.92 0.92
+Ks 0.2 0.2 0.2
+Ns 16
+d 1

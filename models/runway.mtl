@@ -1,0 +1,27 @@
+# Materiais da pista do professor (RUNWAY 8.blend), exportados pelo Blender.
+# Os nomes sao os do .blend. As cores foram ajustadas a mao porque o .mtl
+# exportado tinha o asfalto preto puro e Ns 0 (brilho especular igual em todo o lado).
+
+# asfalto da pista
+newmtl Material
+Kd 0.20 0.20 0.21
+Ks 0.08 0.08 0.08
+Ns 16
+
+# base branca por baixo de tudo (aparece como as faixas laterais)
+newmtl Material.001
+Kd 0.88 0.88 0.86
+Ks 0.15 0.15 0.15
+Ns 16
+
+# zonas de seguranca nas pontas (blast pad)
+newmtl Material.002
+Kd 0.33 0.33 0.32
+Ks 0.05 0.05 0.05
+Ns 8
+
+# marcas: soleira, eixo, zonas de toque
+newmtl white_strip
+Kd 0.92 0.92 0.90
+Ks 0.20 0.20 0.20
+Ns 16
